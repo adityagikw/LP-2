@@ -1,75 +1,57 @@
-def triage_system():   #Defines a function named triage_system.
-    print("=== Hospital Expert System: Patient Triage Assistant ===")  #Prints a heading for the expert system to the console.
+import streamlit as st
 
-    name = input("Enter Patient Name: ")  #Takes the patient’s name as input.
-    age = int(input("Enter Age: "))  #Takes the patient's age and converts it to an integer.
-    print("\nSelect Symptoms (Y/N):")  #Prompts the user to answer yes or no to a list of symptoms.
-    
-    chest_pain = input("Chest Pain? ").lower() == 'y'
-    short_breath = input("Shortness of Breath? ").lower() == 'y'
-    bleeding = input("Heavy Bleeding? ").lower() == 'y'
-    high_fever = input("High Fever? ").lower() == 'y'
-    injury = input("Recent Injury? ").lower() == 'y'
-    dizziness = input("Dizziness or Fainting? ").lower() == 'y'
-    stomach_pain = input("Severe Stomach Pain? ").lower() == 'y'
+st.header("🏥 Hospital Triage Expert System")
 
-#Each line collects a 'Y' or 'N' response for a symptom.
-#input(...).lower() == 'y' converts the input to lowercase and checks if it's 'y' (yes).
+def triage_system_streamlit():
+    st.subheader("Enter Patient Information")
 
-    print("\nAnalyzing symptoms...")
+    name = st.text_input("Patient Name")
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
 
-    if bleeding or injury:
-        department = "Emergency Room (ER)"
-        advice = "Immediate attention required. Proceed to the ER."
-    elif chest_pain or short_breath:
-        department = "Cardiology"
-        advice = "Cardiac symptoms detected. Visit Cardiology immediately."
-    elif high_fever and age < 12:
-        department = "Pediatrics"
-        advice = "High fever in child. Visit Pediatrics urgently."
-    elif high_fever:
-        department = "General Medicine"
-        advice = "Consult a general physician for evaluation."
-    elif dizziness:
-        department = "Neurology"
-        advice = "Neurological symptoms present. Visit Neurology."
-    elif stomach_pain:
-        department = "Gastroenterology"
-        advice = "Visit a gastroenterologist for further diagnosis."
-    else:
-        department = "Outpatient (OPD)"
-        advice = "No critical symptoms. You may proceed to OPD."
+    st.subheader("Select Symptoms (Check all that apply):")
+    chest_pain = st.checkbox("Chest Pain")
+    short_breath = st.checkbox("Shortness of Breath")
+    bleeding = st.checkbox("Heavy Bleeding")
+    high_fever = st.checkbox("High Fever")
+    injury = st.checkbox("Recent Injury")
+    dizziness = st.checkbox("Dizziness or Fainting")
+    stomach_pain = st.checkbox("Severe Stomach Pain")
 
-#If-elif blocks check the symptoms and assign a department and advice.
-#Priority: Emergency > Cardiac > Pediatric > General > Neurology > Gastro > OPD.
+    ask = st.button("Get Triage Result")
+    quit = st.button("Quit")
 
-    print(f"\n=== Patient Report ===")
-    print(f"Name: {name}")
-    print(f"Recommended Department: {department}")
-    print(f"Advice: {advice}")
+    if ask:
+        st.info("🔍 Analyzing symptoms...")
 
-#Outputs the recommended department and advice for the user.
+        if bleeding or injury:
+            department = "Emergency Room (ER)"
+            advice = "🚨 Immediate attention required. Proceed to the ER."
+        elif chest_pain or short_breath:
+            department = "Cardiology"
+            advice = "❤️ Cardiac symptoms detected. Visit Cardiology immediately."
+        elif high_fever and age < 12:
+            department = "Pediatrics"
+            advice = "👶 High fever in child. Visit Pediatrics urgently."
+        elif high_fever:
+            department = "General Medicine"
+            advice = "🩺 Consult a general physician for evaluation."
+        elif dizziness:
+            department = "Neurology"
+            advice = "🧠 Neurological symptoms present. Visit Neurology."
+        elif stomach_pain:
+            department = "Gastroenterology"
+            advice = "🍽️ Visit a gastroenterologist for further diagnosis."
+        else:
+            department = "Outpatient (OPD)"
+            advice = "✅ No critical symptoms. You may proceed to OPD."
+
+        st.subheader("📋 Patient Report")
+        st.write(f"**Name:** {name}")
+        st.write(f"**Recommended Department:** {department}")
+        st.write(f"**Advice:** {advice}")
+
+    if quit:
+        st.write("👋 Thank you for using the Hospital Triage Expert System!")
 
 if __name__ == "__main__":
-    triage_system()
-#Ensures the function runs only when the script is directly executed.
-
-# Sample Input:
-# Enter Patient Name: Ramesh
-# Enter Age: 45
-# Select Symptoms (Y/N):
-# Chest Pain? y
-# Shortness of Breath? n
-# Heavy Bleeding? n
-# High Fever? n
-# Recent Injury? n
-# Dizziness or Fainting? n
-# Severe Stomach Pain? n
-
-# Sample Output:
-# Analyzing symptoms...
-
-# === Patient Report ===
-# Name: Ramesh
-# Recommended Department: Cardiology
-# Advice: Cardiac symptoms detected. Visit Cardiology immediately.
+    triage_system_streamlit()
